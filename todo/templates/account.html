@@ -1,9 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
+{% extends "layout.html" %}
+{% block content %}
 <h1>welcome {{ current_user.username }} </h1>
-</body>
-</html>
+<h2>{{ var }}</h2>
+{% for i in todo %}
+<h3>{{ i.title }}</h3>
+<h3>{{ i.content }}</h3>
+<h3>{{ i.date }}</h3>
+{% endfor %}
+{% endblock %}
