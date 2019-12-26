@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="section-row">
+<div class="col-md-2 col-xs-6">
+    <button class = btn-success onclick="window.location.href='{{ url_for('insert_todo') }}'"></button>   
+    <button class = btn-success onclick="window.location.href='{{ url_for('recm_skill') }}'"></button>
+</div>
+</div>
+
+
+{% endblock content %}

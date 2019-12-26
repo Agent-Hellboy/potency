@@ -25,7 +25,16 @@ class Todo(db.Model,UserMixin):
 	date=db.Column(db.DateTime,nullable=False,default=datetime.datetime.utcnow)
 	content=db.Column(db.Text,nullable=False)
 	user_id=db.Column(db.Integer,db.ForeignKey('user.id'),nullable=False)
+	task=db.relationship('Tasks',backref='todo',lazy=True)
 
 	def __repr__(self):
 		return f"Todo('{self.title}','{self.subject}','{self.date}','{self.content}','{self.user_id}')"
 
+class Tasks(db.Model,UserMixin):
+	id=db.Column(db.Integer,primary_key=True)
+	title=db.Column(db.String(100),nullable=False)
+	time=db.Column(db.String(100),nullable=False)
+	todo_id=db.Column(db.Integer,db.ForeignKey('todo.id'),nullable=False)
+
+	def __repr__(self):
+		return f"Task('{self.title}','{self.time}')"

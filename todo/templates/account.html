@@ -2,9 +2,13 @@
 {% block content %}
 <h1>welcome {{ current_user.username }} </h1>
 <h2>{{ var }}</h2>
+
 {% for i in todo %}
+{% if i.subject!='skill' %}
 <h3>{{ i.title }}</h3>
 <h3>{{ i.content }}</h3>
 <h3>{{ i.date }}</h3>
+{% endif %}
 {% endfor %}
+<h2>{{ skills[0].title }}</h2>
 {% endblock %}

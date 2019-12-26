@@ -37,3 +37,16 @@ class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
     submit = SubmitField('Post')
+
+
+
+class TaskForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    time = StringField('Time', validators=[DataRequired()])
+    submit = SubmitField('Post')
+
+
+
+class SearchForm(FlaskForm):
+    Key_word = StringField('Key_word', validators=[DataRequired()])
+    submit = SubmitField('Post')

@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+{{ form.csrf_token }} 
+{{ form.hidden_tag() }}
+<div class="container">
+    <h1>search for the resources</h1>
+    <form action="" method="POST">
+        <div class="form-group">
+            <input type="text" name="key_word" class="form-control" placeholder="title" required>
+        </div>
+        <button class="btn btn-primary" type="submit" >submit</button>
+    </form>
+</div>
+{% for i in links %}
+
+<a href="{{ i }}">link </a>
+
+{% endfor %}
+{% endblock content %}
