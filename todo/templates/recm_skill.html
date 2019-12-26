@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+
 {% block content %}
 {{ form.csrf_token }} 
 {{ form.hidden_tag() }}
@@ -11,9 +12,11 @@
         <button class="btn btn-primary" type="submit" >submit</button>
     </form>
 </div>
-{% for i in links %}
+{% for i in items %}
 
-<a href="{{ i }}">link </a>
-
+<h2>{{ i['title'] }}> </h2>
+<a class="post-img" href=""><img src="{{ i['image'] }}"height=200px width=160px></a>
+<h5>{{ i['description'] }} </h5>
+<a href="{{ i['link'] }}">link </a>
 {% endfor %}
 {% endblock content %}

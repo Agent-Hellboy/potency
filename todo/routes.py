@@ -75,17 +75,26 @@ def recm_skill():
 	key_word=''
 	if(request.method=='POST'):
 		key_word=request.form.get('key_word')
-	api_key='AIzaSyBwDMpvqtUxZ6ZsAZ_VxspbuATh-CncRWA'
-	youtube=build('youtube','v3',developerKey=api_key)
-	req=youtube.search().list(q=key_word,part='snippet',type='video',maxResults=10)
-	result=req.execute()
-	links=[]
-	for i in result['items']:
-		link='https://www.youtube.com/watch?v='+i['id']['videoId']
-		links.append(link)
-	for j in links:
-		print(link)
-	return render_template('recm_skill.html',links=links,form=form)
+		api_key='AIzaSyBwDMpvqtUxZ6ZsAZ_VxspbuATh-CncRWA'
+		youtube=build('youtube','v3',developerKey=api_key)
+		req=youtube.search().list(q=key_word,part='snippet',type='video',maxResults=10)
+		result=req.execute()
+		items=[]
+		for i in result['items']:
+			var=dict()
+			link='https://www.youtube.com/watch?v='+i['id']['videoId']
+			var['title']=i['snippet']['title']
+			var['description']=i['snippet']['description']
+			var['image']=i['snippet']['thumbnails']['medium']['url']
+			var['link']=link
+			items.append(var)
+		for j in items:
+			print(j)
+		return render_template('recm_skill.html',items=items,form=form)
+	if(request.method=='GET'):
+		return render_template('recm_skill.html',form=form)
+
+	return render_template('recm_skill.html',form=form)
 
 
 @app.route("/skill/insert",methods=['GET','POST'])
