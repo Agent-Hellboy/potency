@@ -10,5 +10,13 @@
 <h3>{{ i.date }}</h3>
 {% endif %}
 {% endfor %}
-<h2>{{ skills[0].title }}</h2>
+<!-- <h2>{{ skills[0].title }}</h2> -->
+
+<h2>Revise these things today</h2>
+{% for j in todo %}
+<h3>{{ j.title }}</h3>
+<h3>{{ j.content }}</h3>
+<h3>you added this on {{ j.date.date() }}</h3>
+{% endfor %}
+
 {% endblock %}

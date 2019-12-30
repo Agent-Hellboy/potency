@@ -15,12 +15,17 @@ def account():
 	curr_user = current_user.id
 	todo=Todo.query.filter_by(user_id=curr_user).all()
 	#print(todo)
+	todorev=[]
+	for i in todo:
+		if(i.date.day%7==0 or i.date.day%3==0 or i.date.day%15==0):
+			todorev.append(i)
 	skills=[]
 	for i in todo:
 		if(i.subject=='skill'):
 			skills.append(i)
 	print(skills)
-	return render_template('account.html',todo=todo,skills=skills)
+
+	return render_template('account.html',todo=todo,skills=skills,todorev=todorev)
 
 
 @app.route('/login',methods=['GET','POST'])
@@ -35,10 +40,10 @@ def login():
 		#print(user)
 		if user and bcrypt.check_password_hash(user.password,request.form.get('password')):
 				login_user(user)
-				next_page=request.args.get('next')
+				return redirect(url_for('skill'))
 				#print(next_page)
 				#print(user.todo)
-				return redirect(next_page) if next_page else redirect(url_for('skill',var=user.todo))	
+				
 	return render_template('login.html',form=form)
 
 
