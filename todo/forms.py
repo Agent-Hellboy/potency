@@ -50,3 +50,5 @@ class TaskForm(FlaskForm):
 class SearchForm(FlaskForm):
     Key_word = StringField('Key_word', validators=[DataRequired()])
     submit = SubmitField('Post')
+
+

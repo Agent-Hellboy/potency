@@ -35,6 +35,16 @@ class Tasks(db.Model,UserMixin):
 	title=db.Column(db.String(100),nullable=False)
 	time=db.Column(db.String(100),nullable=False)
 	todo_id=db.Column(db.Integer,db.ForeignKey('todo.id'),nullable=False)
-
+	tasksum=db.relationship('Tasksum',backref='todo',lazy=True)
 	def __repr__(self):
 		return f"Task('{self.title}','{self.time}')"
+
+class Tasksum(db.Model,UserMixin):
+	id=db.Column(db.Integer,primary_key=True)
+	title=db.Column(db.String(100),nullable=False)
+	description=db.Column(db.Text(20000),nullable=False)
+	date=db.Column(db.DateTime,nullable=False,default=datetime.datetime.utcnow)
+	task_id=db.Column(db.Integer,db.ForeignKey('tasks.id'),nullable=False)
+
+	def __repr__(self):
+		return f"Task('{self.title}','{self.description}')"

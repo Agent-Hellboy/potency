@@ -1,9 +1,10 @@
 from flask import render_template,flash,url_for,redirect,request
 from todo import app,db,bcrypt
-from todo.model import User,Todo,Tasks
+from todo.model import User,Todo,Tasks,Tasksum
 from todo.forms import RegistrationForm,LoginForm,PostForm,TaskForm,SearchForm
 from flask_login import login_user,current_user,login_required,logout_user
 from apiclient.discovery import build
+import datetime
 
 @app.route('/')
 def home():
@@ -17,7 +18,8 @@ def account():
 	#print(todo)
 	todorev=[]
 	for i in todo:
-		if(i.date.day%7==0 or i.date.day%3==0 or i.date.day%15==0):
+		if(i.date.day+7==datetime.datetime.now().date().day or i.date.day+3==datetime.datetime.now().date().day
+		 or i.date.day%15==datetime.datetime.now().date().day):
 			todorev.append(i)
 	skills=[]
 	for i in todo:
@@ -80,7 +82,7 @@ def recm_skill():
 	key_word=''
 	if(request.method=='POST'):
 		key_word=request.form.get('key_word')
-		api_key='AIzaSyBwDMpvqtUxZ6ZsAZ_VxspbuATh-CncRWA'
+		api_key='AIzaSyDlSP52WUTbhSPggRwcLsGQbrWpymVvcYU'
 		youtube=build('youtube','v3',developerKey=api_key)
 		req=youtube.search().list(q=key_word,part='snippet',type='video',maxResults=10)
 		result=req.execute()
@@ -130,6 +132,18 @@ def add_task():
 	return render_template('add_task.html',form=form)
 
 
+@app.route("/todo/task_desc",methods=['GET','POST'])
+@login_required
+def task_desc():
+	var=request.args.get('my_var')
+	if(request.method=='POST'):
+		title=request.form.get('title')
+		description=request.form.get('description')
+		taskdesc=Tasksum(title=title,description=description,task_id=var)
+		db.session.add(taskdesc)
+		db.session.commit()
+		return render_template('task_desc.html')
+	return render_template('task_desc.html')
 
 @app.route("/logout")
 @login_required
