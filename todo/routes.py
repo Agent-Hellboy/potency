@@ -130,11 +130,10 @@ def about_task():
 @app.route("/todo/add_task",methods=['GET','POST'])
 @login_required
 def add_task():
-	form=TaskForm()
+	var=request.args.get('my_var')
 	if(request.method=='POST'):
 		title=request.form.get('title')
-		time=request.form.get('appt')
-		user=Tasks(title=title,time=time,todo_id=1)
+		user=Tasks(title=title,todo_id=var)
 		db.session.add(user)
 		db.session.commit()
 		return redirect(url_for('home'))
