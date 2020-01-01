@@ -22,7 +22,7 @@
 <h2>SKILLS</h2>
 {% for j in todo %}
 <h3>{{ j.title }}</h3>
-<button onclick="window.location.href='{{ url_for('task_desc', my_var=j.id ) }}'">open</button>
+<button onclick="window.location.href='{{ url_for('about_task', my_var=j.id ) }}'">open</button>
 {% endfor %}
 
 {% endblock %}

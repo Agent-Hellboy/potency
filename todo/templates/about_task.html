@@ -1,0 +1,14 @@
+{% extends "layout.html"%}
+{% block content %}
+
+{% for i in task %}
+<h3>{{ i.title }}</h3>
+Added on
+<h4>{{ i.date.date() }}</h4>
+
+{% endfor %}
+<h1>{{ var }}</h1>
+
+<button type='success' onclick="window.location.href='{{ url_for('add_task', my_var=var ) }}'">add task</button>
+<button type='success' onclick="window.location.href='{{ url_for('task_desc', my_var=var ) }}'">desc task</button>
+{% endblock %}

@@ -118,6 +118,15 @@ def insert_todo():
 		return redirect(url_for('home'))
 	return render_template('insert_todo.html',form=form)
 
+@app.route("/skills/tasks",methods=['GET','POST'])
+@login_required
+def about_task():
+	var=request.args.get('my_var')
+	task=Tasks.query.filter_by(todo_id=var).all()
+	print(var)
+	return render_template('about_task.html',task=task,var=var)
+
+
 @app.route("/todo/add_task",methods=['GET','POST'])
 @login_required
 def add_task():

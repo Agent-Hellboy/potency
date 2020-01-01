@@ -33,11 +33,11 @@ class Todo(db.Model,UserMixin):
 class Tasks(db.Model,UserMixin):
 	id=db.Column(db.Integer,primary_key=True)
 	title=db.Column(db.String(100),nullable=False)
-	time=db.Column(db.String(100),nullable=False)
+	date=db.Column(db.DateTime,nullable=False,default=datetime.datetime.utcnow)
 	todo_id=db.Column(db.Integer,db.ForeignKey('todo.id'),nullable=False)
 	tasksum=db.relationship('Tasksum',backref='todo',lazy=True)
 	def __repr__(self):
-		return f"Task('{self.title}','{self.time}')"
+		return f"Task('{self.title}','{self.date}','{self.todo_id}')"
 
 class Tasksum(db.Model,UserMixin):
 	id=db.Column(db.Integer,primary_key=True)
