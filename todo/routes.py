@@ -13,21 +13,8 @@ def home():
 @app.route('/account')
 @login_required
 def account():
-	curr_user = current_user.id
-	todo=Todo.query.filter_by(user_id=curr_user).all()
-	#print(todo)
-	todorev=[]
-	for i in todo:
-		if(i.date.day+7==datetime.datetime.now().date().day or i.date.day+3==datetime.datetime.now().date().day
-		 or i.date.day%15==datetime.datetime.now().date().day):
-			todorev.append(i)
-	skills=[]
-	for i in todo:
-		if(i.subject=='skill'):
-			skills.append(i)
-	print(skills)
-
-	return render_template('account.html',todo=todo,skills=skills,todorev=todorev)
+	
+	return render_template('account.html')
 
 
 @app.route('/login',methods=['GET','POST'])
@@ -103,6 +90,24 @@ def recm_skill():
 
 	return render_template('recm_skill.html',form=form)
 
+@app.route("/skills",methods=['GET','POST'])
+@login_required
+def skills():
+	curr_user = current_user.id
+	todo=Todo.query.filter_by(user_id=curr_user).all()
+	#print(todo)
+	todorev=[]
+	for i in todo:
+		if(i.date.day+7==datetime.datetime.now().date().day or i.date.day+3==datetime.datetime.now().date().day
+		 or i.date.day%15==datetime.datetime.now().date().day):
+			todorev.append(i)
+	skills=[]
+	for i in todo:
+		if(i.subject=='skill'):
+			skills.append(i)
+	#print(skills)
+	return render_template('skills.html',todo=todo,skills=skills,todorev=todorev)
+
 
 @app.route("/skill/insert",methods=['GET','POST'])
 @login_required
@@ -152,6 +157,7 @@ def task_desc():
 		db.session.commit()
 		return render_template('task_desc.html')
 	return render_template('task_desc.html')
+
 
 @app.route("/logout")
 @login_required

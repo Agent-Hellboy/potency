@@ -31,7 +31,7 @@
 
             <div class="navbar-nav">
               {% if current_user.is_authenticated %}
-              <a class="nav-item nav-link" href="{{ url_for('insert_todo') }}">SKills</a>
+              <a class="nav-item nav-link" href="{{ url_for('skills') }}">SKills</a>
               <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
               <a class="nav-item nav-link" href="{{ url_for('account') }}">Account</a>
               {% else %}
