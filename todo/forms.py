@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField,FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField,TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo,ValidationError
 from todo.model import User
@@ -52,3 +53,6 @@ class SearchForm(FlaskForm):
     submit = SubmitField('Post')
 
 
+class UpdateAccountForm(FlaskForm):
+    picture=FileField('update profile picture',FileAllowed(['jpg','png']))
+    submit = SubmitField('Post')

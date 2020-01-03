@@ -6,16 +6,46 @@ from flask_login import login_user,current_user,login_required,logout_user
 from apiclient.discovery import build
 import datetime
 
+import os
+import secrets
+from PIL import Image
+
+
+allowed_extensions = ["jpg", "png", "ppm"]
+
 @app.route('/')
 def home():
 	return render_template('home.html')
 
-@app.route('/account')
+def save_and_upload(file):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(file.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+    output_size = (125, 125)
+    i = Image.open(file)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+    return picture_fn
+
+@app.route('/account',methods=['GET','POST'])
 @login_required
 def account():
 	pro_pic=url_for('static',filename='profile_pics/'+current_user.image_file)
+	if request.method == 'POST':
+		file=request.files.get('file')
+		picture_file=save_and_upload(file)
+		current_user.image_file=picture_file
+		db.session.commit()
+		return redirect(url_for('account')) 
 	return render_template('account.html',pro_pic=pro_pic)
 
+
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
 
 @app.route('/login',methods=['GET','POST'])
 def login():
@@ -23,8 +53,10 @@ def login():
 		return	redirect(url_for('home'))
 	form=LoginForm()
 	print(form.validate_on_submit())
+
 	if(request.method=='POST'):
-		print(request.form.get('username'))
+		print(form.email.data)
+		#print(request.form.get('username'))
 		user=User.query.filter_by(email=request.form.get('username')).first()
 		#print(user)
 		if user and bcrypt.check_password_hash(user.password,request.form.get('password')):
