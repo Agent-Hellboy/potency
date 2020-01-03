@@ -1,11 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="section-row">
-<div class="col-md-2 col-xs-6">
-    <button class = btn-success onclick="window.location.href='{{ url_for('insert_todo') }}'"></button>   
-    <button class = btn-success onclick="window.location.href='{{ url_for('recm_skill') }}'"></button>
-</div>
-</div>
 
+<h2>SKILLS</h2>
+{% for j in todo %}
+<h3>{{ j.title }}</h3>
+<button onclick="window.location.href='{{ url_for('about_task', my_var=j.id ) }}'">open</button>
+{% endfor %}
 
+<div>
+	<h5>Add a new skill</h5>
+    <button  type = "button" class="btn btn-default" onclick="window.location.href='{{ url_for('insert_todo') }}'">ADD </button>   
+    <h5>Search for how to master</h5>
+    <button  type = "button" class="btn btn-default" onclick="window.location.href='{{ url_for('recm_skill') }}'">SEARCH</button>
+</div>
 {% endblock content %}

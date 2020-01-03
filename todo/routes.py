@@ -29,7 +29,7 @@ def login():
 		#print(user)
 		if user and bcrypt.check_password_hash(user.password,request.form.get('password')):
 				login_user(user)
-				return redirect(url_for('skill'))
+				return redirect(url_for('skills'))
 				#print(next_page)
 				#print(user.todo)
 				
@@ -50,7 +50,7 @@ def register():
 		user=User(username=username,email=email,password=hashed_password)
 		db.session.add(user)
 		db.session.commit()	
-		print('account created')
+		#print('account created')
 		return redirect(url_for('login'))
 	return render_template('register.html',form=form)
 	
