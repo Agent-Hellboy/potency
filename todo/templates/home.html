@@ -1,3 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
+<h1>currenly prefered by users</h1>
+{% for i in curr_skill %}
+<h3>{{ i }}</h3>
+{% endfor %}
 {% endblock content %}

@@ -15,7 +15,14 @@ allowed_extensions = ["jpg", "png", "ppm"]
 
 @app.route('/')
 def home():
-	return render_template('home.html')
+	curr_skill=set()
+	todo=Todo.query.all()
+	print(todo)
+	for i in todo:
+		if i.subject=='skill':
+			curr_skill.add(i.title)
+	print(curr_skill)
+	return render_template('home.html',curr_skill=curr_skill)
 
 def save_and_upload(file):
     random_hex = secrets.token_hex(8)
@@ -42,10 +49,7 @@ def account():
 
 
 
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
+
 
 @app.route('/login',methods=['GET','POST'])
 def login():
@@ -90,8 +94,13 @@ def register():
 @app.route("/skill",methods=['GET','POST'])
 @login_required
 def skill():
-	
-	return render_template('skill.html')
+	curr_user = current_user.id
+	todo=Todo.query.filter_by(user_id=curr_user).all()
+	skills=[]
+	for i in todo:
+		if(i.subject=='skill'):
+			skills.append(i)
+	return render_template('skill.html',skills=skills)
 
 
 @app.route("/recm",methods=['GET','POST'])
@@ -133,12 +142,9 @@ def skills():
 		if(i.date.day+7==datetime.datetime.now().date().day or i.date.day+3==datetime.datetime.now().date().day
 		 or i.date.day%15==datetime.datetime.now().date().day):
 			todorev.append(i)
-	skills=[]
-	for i in todo:
-		if(i.subject=='skill'):
-			skills.append(i)
+	
 	#print(skills)
-	return render_template('skills.html',todo=todo,skills=skills,todorev=todorev)
+	return render_template('skills.html',todo=todo,todorev=todorev)
 
 
 @app.route("/skill/insert",methods=['GET','POST'])
@@ -174,7 +180,7 @@ def add_task():
 		db.session.add(user)
 		db.session.commit()
 		return redirect(url_for('home'))
-	return render_template('add_task.html',form=form)
+	return render_template('add_task.html')
 
 
 @app.route("/todo/task_desc",methods=['GET','POST'])

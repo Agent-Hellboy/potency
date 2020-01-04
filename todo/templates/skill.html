@@ -2,7 +2,7 @@
 {% block content %}
 
 <h2>SKILLS</h2>
-{% for j in todo %}
+{% for j in skills %}
 <h3>{{ j.title }}</h3>
 <button onclick="window.location.href='{{ url_for('about_task', my_var=j.id ) }}'">open</button>
 {% endfor %}
