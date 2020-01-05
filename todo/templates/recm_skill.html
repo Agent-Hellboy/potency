@@ -9,13 +9,16 @@
         <div class="form-group">
             <input type="text" name="key_word" class="form-control" placeholder="title" required>
         </div>
-        <button class="btn btn-primary" type="submit" >submit</button>
+        <button type='submit'  name='val' value='val1' >search video</button>
+		<button type='submit' name='val' value='val2' >search websites</button>
     </form>
 </div>
 {% for i in items %}
 
 <h2>{{ i['title'] }}> </h2>
+{% if(val=='val1') %}
 <a class="post-img" href=""><img src="{{ i['image'] }}"height=200px width=160px></a>
+{% endif %}
 <h5>{{ i['description'] }} </h5>
 <a href="{{ i['link'] }}">link </a>
 {% endfor %}

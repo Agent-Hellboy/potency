@@ -5,6 +5,7 @@ from todo.forms import RegistrationForm,LoginForm,PostForm,TaskForm,SearchForm
 from flask_login import login_user,current_user,login_required,logout_user
 from apiclient.discovery import build
 import datetime
+from todo.scrap import scrape_google
 
 import os
 import secrets
@@ -15,6 +16,7 @@ allowed_extensions = ["jpg", "png", "ppm"]
 
 @app.route('/')
 def home():
+	print(scrape_google('flask',3,'en'))
 	curr_skill=set()
 	todo=Todo.query.all()
 	print(todo)
@@ -108,7 +110,9 @@ def skill():
 def recm_skill():
 	form=SearchForm()
 	key_word=''
-	if(request.method=='POST'):
+	val=request.form.get('val')
+	print(val)
+	if(request.method=='POST' and val=='val1'):
 		key_word=request.form.get('key_word')
 		api_key='AIzaSyDlSP52WUTbhSPggRwcLsGQbrWpymVvcYU'
 		youtube=build('youtube','v3',developerKey=api_key)
@@ -123,12 +127,25 @@ def recm_skill():
 			var['image']=i['snippet']['thumbnails']['medium']['url']
 			var['link']=link
 			items.append(var)
-		for j in items:
-			print(j)
-		return render_template('recm_skill.html',items=items,form=form)
+		# for j in items:
+		# 	print(j)
+		return render_template('recm_skill.html',val=val,items=items,form=form)
+		#print("1")
+	if(request.method=='POST' and val=='val2'):	
+		#Print(val)
+		key_word=request.form.get('key_word')
+		result=scrape_google(key_word,10,'en')
+		items=[]
+		for i in result:
+			var=dict()
+			link=i['link']
+			var['title']=i['title']
+			var['description']=i['description']
+			var['image']=None
+			items.append(var)
+		return render_template('recm_skill.html',items=items,val=val,form=form)	
 	if(request.method=='GET'):
-		return render_template('recm_skill.html',form=form)
-
+		return render_template('recm_skill.html',form=form)	
 	return render_template('recm_skill.html',form=form)
 
 @app.route("/skills",methods=['GET','POST'])
