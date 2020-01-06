@@ -27,7 +27,7 @@ class Todo(db.Model,UserMixin):
 	task=db.relationship('Tasks',backref='todo',lazy=True)
 
 	def __repr__(self):
-		return f"Todo('{self.title}','{self.subject}','{self.date}','{self.content}','{self.user_id}')"
+		return f"Todo('{self.id}' '{self.title}','{self.subject}','{self.date}','{self.content}','{self.user_id}')"
 
 class Tasks(db.Model,UserMixin):
 	id=db.Column(db.Integer,primary_key=True)

@@ -2,11 +2,12 @@
 {% block content %}
 
 <h2>SKILLS</h2>
+<div >
 {% for j in skills %}
-<h3>{{ j.title }}</h3>
-<button onclick="window.location.href='{{ url_for('about_task', my_var=j.id ) }}'">open</button>
+<h3>{{ j.title }}
+<button class="text-right" onclick="window.location.href='{{ url_for('about_task', my_var=j.id ) }}'">open</button></h3><br>
 {% endfor %}
-
+</div>
 <div>
 	<h5>Add a new skill</h5>
     <button  type = "button" class="btn btn-default" onclick="window.location.href='{{ url_for('insert_todo') }}'">ADD </button>   

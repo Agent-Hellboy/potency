@@ -22,7 +22,7 @@ def home():
 	print(todo)
 	for i in todo:
 		if i.subject=='skill':
-			curr_skill.add(i.title)
+			curr_skill.add(i)
 	print(curr_skill)
 	return render_template('home.html',curr_skill=curr_skill)
 
