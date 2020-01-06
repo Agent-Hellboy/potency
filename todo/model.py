@@ -13,7 +13,7 @@ class User(db.Model,UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
-    todo=db.relationship('Todo',backref='user',lazy=True)
+    todo=db.relationship('Todo',backref='user',lazy=True,passive_deletes=True)
     def __repr__(self):
     	return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
@@ -23,8 +23,8 @@ class Todo(db.Model,UserMixin):
 	subject=db.Column(db.String(100),nullable=False)
 	date=db.Column(db.DateTime,nullable=False,default=datetime.datetime.utcnow)
 	content=db.Column(db.Text,nullable=False)
-	user_id=db.Column(db.Integer,db.ForeignKey('user.id'),nullable=False)
-	task=db.relationship('Tasks',backref='todo',lazy=True)
+	user_id=db.Column(db.Integer,db.ForeignKey('user.id',ondelete='CASCADE'),nullable=False)
+	task=db.relationship('Tasks',backref='todo',lazy=True,passive_deletes=True)
 
 	def __repr__(self):
 		return f"Todo('{self.id}' '{self.title}','{self.subject}','{self.date}','{self.content}','{self.user_id}')"
@@ -33,8 +33,8 @@ class Tasks(db.Model,UserMixin):
 	id=db.Column(db.Integer,primary_key=True)
 	title=db.Column(db.String(100),nullable=False)
 	date=db.Column(db.DateTime,nullable=False,default=datetime.datetime.utcnow)
-	todo_id=db.Column(db.Integer,db.ForeignKey('todo.id'),nullable=False)
-	tasksum=db.relationship('Tasksum',backref='todo',lazy=True)
+	todo_id=db.Column(db.Integer,db.ForeignKey('todo.id',ondelete='CASCADE'),nullable=False)
+	tasksum=db.relationship('Tasksum',backref='todo',lazy=True,passive_deletes=True)
 	def __repr__(self):
 		return f"Task('{self.title}','{self.date}','{self.todo_id}')"
 
