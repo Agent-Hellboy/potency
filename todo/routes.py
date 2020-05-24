@@ -1,16 +1,17 @@
+import datetime
+import os
+import secrets
+
 from flask import render_template, flash, url_for, redirect, request
+from flask_login import login_user, current_user, login_required, logout_user
+from apiclient.discovery import build
+
+from PIL import Image
+from todo.scrap import scrape_google
 from todo import app, db, bcrypt
 from todo.model import User, Todo, Tasks, Tasksum
 from todo.forms import RegistrationForm, LoginForm, PostForm, TaskForm, SearchForm
-from flask_login import login_user, current_user, login_required, logout_user
-from apiclient.discovery import build
-import datetime
-from todo.scrap import scrape_google
-
-import os
-import secrets
-from PIL import Image
-
+from pyytdata import pyytdata
 
 allowed_extensions = ["jpg", "png", "ppm"]
 
@@ -58,13 +59,13 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
     form = LoginForm()
-    print(form.validate_on_submit())
 
     if request.method == "POST":
-        print(form.email.data)
-        # print(request.form.get('username'))
+        print(request.form.get('username'))
+        print(User.query.all())
+        print(request.form.get("username"))
         user = User.query.filter_by(email=request.form.get("username")).first()
-        # print(user)
+        print(user)
         if user and bcrypt.check_password_hash(
             user.password, request.form.get("password")
         ):
@@ -86,7 +87,7 @@ def register():
         email = request.form.get("email")
         password = request.form.get("password")
         confirm = request.form.get("confirm")
-        hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+        hashed_password = bcrypt.generate_password_hash(password)
         user = User(username=username, email=email, password=hashed_password)
         db.session.add(user)
         db.session.commit()
@@ -113,30 +114,33 @@ def recm_skill():
     form = SearchForm()
     key_word = ""
     val = request.form.get("val")
-    print(val)
+    
     if request.method == "POST" and val == "val1":
         key_word = request.form.get("key_word")
-        api_key = "AIzaSyDlSP52WUTbhSPggRwcLsGQbrWpymVvcYU"
-        youtube = build("youtube", "v3", developerKey=api_key)
-        req = youtube.search().list(
-            q=key_word, part="snippet", type="video", maxResults=10
-        )
-        result = req.execute()
+        data = pyytdata.PyYtData(key_word,10)
+        
+        # list to contain info of the video
         items = []
-        for i in result["items"]:
+        
+        titles = data.get_titles()
+        descriptions = data.get_descriptions()
+        get_urls = data.get_image_urls()
+        get_links = data.get_links()
+        data1 = zip(titles,descriptions,get_urls,get_links)
+        
+        for i in data1:
             var = dict()
-            link = "https://www.youtube.com/watch?v=" + i["id"]["videoId"]
-            var["title"] = i["snippet"]["title"]
-            var["description"] = i["snippet"]["description"]
-            var["image"] = i["snippet"]["thumbnails"]["medium"]["url"]
-            var["link"] = link
+            var["title"] = i[0]
+            var["description"] = i[1]
+            var["image"] = i[2]
+            var["link"] = i[3]
             items.append(var)
         # for j in items:
         # 	print(j)
         return render_template("recm_skill.html", val=val, items=items, form=form)
-        # print("1")
+        
     if request.method == "POST" and val == "val2":
-        # Print(val)
+        
         key_word = request.form.get("key_word")
         result = scrape_google(key_word, 10, "en")
         items = []
@@ -168,7 +172,7 @@ def skills():
         ):
             todorev.append(i)
 
-    # print(skills)
+    #
     return render_template("skills.html", todo=todo, todorev=todorev)
 
 
